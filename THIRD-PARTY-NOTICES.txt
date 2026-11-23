@@ -1,0 +1,26 @@
+Recly includes or uses the following third-party components. Each keeps its own license.
+
+Bundled with the app
+--------------------
+Rubik (variable font, Hebrew and Latin subsets)        fonts/
+  SIL Open Font License 1.1 — fonts/OFL.txt
+  Source: @fontsource-variable/rubik
+
+transformers.js (@huggingface/transformers 4.3.2)      vendor/transformers/transformers.min.js
+  Apache License 2.0 — vendor/transformers/LICENSE-transformers.js.txt
+  https://github.com/huggingface/transformers.js
+
+ONNX Runtime Web (onnxruntime-web 1.31.0-dev)          vendor/transformers/ort-wasm-simd-threaded.asyncify.*
+  MIT License — vendor/transformers/LICENSE-onnxruntime-web.txt
+  https://github.com/microsoft/onnxruntime
+
+Downloaded at runtime, only after the user agrees
+-------------------------------------------------
+ivrit-ai/whisper-large-v3-turbo-onnx (speech-to-text model for captions)
+  Apache License 2.0 — https://huggingface.co/ivrit-ai/whisper-large-v3-turbo-onnx
+  Based on OpenAI Whisper large-v3-turbo (MIT).
+  Not included in this repository; kept in the user's browser cache.
+
+Developer tooling only (not shipped)
+------------------------------------
+Playwright (Apache-2.0), axe-core (MPL-2.0) — used by the test suite.

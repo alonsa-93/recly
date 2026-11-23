@@ -1,0 +1,17 @@
+{
+  "name": "Recly — הקלטת מסך מקומית",
+  "short_name": "Recly",
+  "description": "מקליט מסך שרץ כולו בדפדפן. בלי הרשמה, בלי הגבלת זמן, בלי העלאה לשרת.",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#cfece7",
+  "theme_color": "#0c7d75",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

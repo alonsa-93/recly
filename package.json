@@ -1,0 +1,14 @@
+{
+  "name": "recly",
+  "private": true,
+  "description": "Dev tooling only. The app itself has no dependencies and no build step.",
+  "scripts": {
+    "test": "node tests/e2e.test.js"
+  },
+  "devDependencies": {
+    "@fontsource-variable/rubik": "5.1.1",
+    "@huggingface/transformers": "4.3.2",
+    "axe-core": "4.10.3",
+    "playwright": "1.62.1"
+  }
+}

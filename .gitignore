@@ -1,0 +1,9 @@
+node_modules/
+tests/output/
+docs/brand/ico/
+*.mp4
+*.webm
+.claude/
+# local working notes (not part of the project)
+CLAUDE.md
+ROADMAP.md
