@@ -18,10 +18,8 @@
   <a href="https://github.com/alonsa-93/recly/actions/workflows/ci.yml"><img src="https://github.com/alonsa-93/recly/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 </p>
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/recording-dark.jpg">
-  <img src="docs/screenshots/recording-light.jpg" alt="Recly recording a slide deck with a camera bubble" width="90%">
-</picture>
+<img src="docs/screenshots/demo.gif" alt="Recly in action: pick screen + camera, record, move the camera bubble, stop, and get Hebrew captions" width="90%"><br>
+<sub>Screen + camera → record → move the bubble → stop → Hebrew captions. Demo media, no real data.</sub>
 
 </div>
 
@@ -64,7 +62,7 @@
 | ♿ **Accessible** | right-to-left Hebrew UI, keyboard shortcuts, light and dark themes, automated WCAG 2.1 AA checks |
 
 ## 📸 Screenshots
-<sub>All screenshots use built-in demo media: a drawn slide deck and an illustrated presenter.</sub>
+<sub>All screenshots use built-in demo media: a drawn sample slide and an illustrated presenter. Nothing in them is real data.</sub>
 
 | Recording with a camera bubble (light) | Recording (dark) |
 |---|---|

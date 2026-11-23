@@ -4,6 +4,11 @@ const http = require('http'), fs = require('fs'), path = require('path');
 const { chromium } = require('playwright');
 const ROOT = path.join(__dirname, '..');
 const OUT_B = path.join(ROOT, 'docs', 'brand'), OUT_S = path.join(ROOT, 'docs', 'screenshots');
+const { execFileSync } = require('child_process');
+const MOCK_CUES = () => { window.__asrMock = async () => [
+  { start: 0.4, end: 2.8, text: 'היום נעבור על שלושה טיפים למצגת טובה.' },
+  { start: 2.9, end: 5.6, text: 'הראשון: רעיון אחד בכל שקופית.' },
+  { start: 5.7, end: 8.6, text: 'והאחרון: תמיד לסיים עם צעד הבא.' }]; };
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.wasm': 'application/wasm', '.woff2': 'font/woff2', '.png': 'image/png', '.webmanifest': 'application/manifest+json', '.ico': 'image/x-icon', '.svg': 'image/svg+xml' };
 
 const MARK_SVG = fs.readFileSync(path.join(ROOT, 'icons', 'mark.svg'), 'utf8');
@@ -60,19 +65,23 @@ const DEMO = () => {
     const g = screen.getContext('2d'), W = 1920, H = 1080;
     const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#0f1c2e'); bg.addColorStop(1, '#16304a');
     g.fillStyle = bg; g.fillRect(0, 0, W, H);
-    g.fillStyle = 'rgba(255,255,255,.06)'; for (let i = 0; i < 12; i++) g.fillRect(0, 140 + i * 80, W, 1);
-    g.fillStyle = '#7dd3fc'; g.font = '600 34px Rubik, Segoe UI, sans-serif'; g.textAlign = 'right'; g.direction = 'rtl';
-    g.fillText('סקירה רבעונית · Q3', W - 120, 130);
-    g.fillStyle = '#fff'; g.font = '800 92px Rubik, Segoe UI, sans-serif'; g.fillText('צמיחה של 38% במשתמשים', W - 120, 250);
-    g.fillStyle = 'rgba(255,255,255,.7)'; g.font = '400 40px Rubik, Segoe UI, sans-serif';
-    ['הרשמה בלחיצה אחת', 'זמן טעינה ירד בחצי', 'שימור משתמשים: 71%'].forEach((s, i) => { g.fillText('•  ' + s, W - 120, 380 + i * 74); });
-    const vals = [38, 52, 47, 66, 74, 88, 96], bw = 92;
-    vals.forEach((v, i) => {
-      const k = Math.min(1, Math.max(0, (t - i * .12) * 1.4)), h = v * 6.2 * k, x = 140 + i * (bw + 34), y = 960 - h;
-      const gr = g.createLinearGradient(0, y, 0, 960); gr.addColorStop(0, i === vals.length - 1 ? '#2dd4bf' : '#38bdf8'); gr.addColorStop(1, 'rgba(56,189,248,.25)');
-      g.fillStyle = gr; g.beginPath(); g.roundRect(x, y, bw, h, 14); g.fill();
+    g.fillStyle = 'rgba(255,255,255,.05)'; for (let i = 0; i < 14; i++) g.fillRect(0, 60 + i * 80, W, 1);
+    g.textAlign = 'right'; g.direction = 'rtl';
+    g.fillStyle = '#7dd3fc'; g.font = '600 34px Rubik, Segoe UI, sans-serif'; g.fillText('סדנת מצגות · שקופית 2 מתוך 6', W - 120, 130);
+    g.fillStyle = '#fff'; g.font = '800 92px Rubik, Segoe UI, sans-serif'; g.fillText('שלושה טיפים למצגת טובה', W - 120, 250);
+    const tips = [['1', 'רעיון אחד', 'בכל שקופית'], ['2', 'מעט טקסט', 'הרבה דוגמאות'], ['3', 'לסיים', 'עם צעד הבא']];
+    const cw = 500, gap = 50, top = 360;
+    tips.forEach(([n, a, b], i) => {
+      const k = Math.min(1, Math.max(0, (t - i * .25) * 1.6)), x = W - 120 - (i + 1) * cw - i * gap, y = top + (1 - k) * 40;
+      g.globalAlpha = k;
+      g.fillStyle = 'rgba(255,255,255,.07)'; g.strokeStyle = 'rgba(125,211,252,.35)'; g.lineWidth = 2;
+      g.beginPath(); g.roundRect(x, y, cw, 300, 28); g.fill(); g.stroke();
+      g.fillStyle = i === 0 ? '#2dd4bf' : '#38bdf8'; g.beginPath(); g.arc(x + cw - 80, y + 80, 44, 0, 7); g.fill();
+      g.fillStyle = '#0f1c2e'; g.textAlign = 'center'; g.font = '800 52px Rubik, Segoe UI, sans-serif'; g.fillText(n, x + cw - 80, y + 98);
+      g.textAlign = 'right'; g.fillStyle = '#fff'; g.font = '700 56px Rubik, Segoe UI, sans-serif'; g.fillText(a, x + cw - 50, y + 200);
+      g.fillStyle = 'rgba(255,255,255,.7)'; g.font = '400 40px Rubik, Segoe UI, sans-serif'; g.fillText(b, x + cw - 50, y + 256);
+      g.globalAlpha = 1;
     });
-    g.fillStyle = 'rgba(255,255,255,.35)'; g.fillRect(120, 962, 1000, 3);
     const c = cam.getContext('2d');
     const cb = c.createLinearGradient(0, 0, 640, 480); cb.addColorStop(0, '#f6d7c3'); cb.addColorStop(1, '#e9b9a0');
     c.fillStyle = cb; c.fillRect(0, 0, 640, 480);
@@ -158,9 +167,9 @@ const DEMO = () => {
     await recordWithBubble(page); await page.waitForTimeout(6000);
     await page.click('#btnStop'); await page.waitForFunction(() => phase === 'done' && speech && speech.has, null, { timeout: 30000 });
     await page.evaluate(() => { window.__asrMock = async () => [
-      { start: 0.6, end: 2.6, text: 'שלום לכולם וברוכים הבאים.' },
-      { start: 2.8, end: 5.3, text: 'היום אני אראה לכם איך מקליטים את המסך בקלות.' },
-      { start: 5.5, end: 8.4, text: 'לוחצים על הכפתור, בוחרים חלון ומתחילים לדבר.' }]; });
+      { start: 0.4, end: 2.8, text: 'היום נעבור על שלושה טיפים למצגת טובה.' },
+      { start: 2.9, end: 5.6, text: 'הראשון: רעיון אחד בכל שקופית.' },
+      { start: 5.7, end: 8.6, text: 'והאחרון: תמיד לסיים עם צעד הבא.' }]; });
     await page.click('#btnCap'); await page.waitForFunction(() => cues.length === 3);
     await page.evaluate(() => { const v = document.getElementById('playback'); v.currentTime = 3.6; });
     await page.waitForTimeout(800);
@@ -178,6 +187,41 @@ const DEMO = () => {
     await page.waitForTimeout(300);
     await shot(page, 'region-dark');
   });
+
+  // Demo GIF: pick a mode, record with the bubble, move it, stop, get Hebrew captions, play.
+  {
+    const VID = path.join(ROOT, 'tests', 'output', 'gif'); fs.rmSync(VID, { recursive: true, force: true });
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 }, colorScheme: 'light', recordVideo: { dir: VID, size: { width: 1280, height: 800 } } });
+    await ctx.addInitScript(DEMO);
+    await ctx.addInitScript(() => { try { if (!sessionStorage.getItem('s')) { sessionStorage.setItem('s', 1); localStorage.clear(); localStorage.setItem('recly.theme', 'light'); } } catch (e) {} });
+    const page = await ctx.newPage(); const t0 = Date.now();
+    await page.goto(base); await page.evaluate(() => document.fonts.ready);
+    await page.selectOption('#cd', '0'); await page.selectOption('#frame', 'teal');
+    const lead = (Date.now() - t0) / 1000;
+    await page.waitForTimeout(700);
+    await page.click('#seg button[data-m="screen+cam"]'); await page.waitForTimeout(1200);
+    await page.click('#btnStart'); await page.waitForFunction(() => phase === 'recording'); await page.waitForTimeout(2200);
+    const b = await page.locator('#stage').boundingBox();
+    const from = await page.evaluate(() => { const r = stage.getBoundingClientRect(), k = r.width / stage.width; return { x: r.left + (box.x + box.w / 2) * k, y: r.top + (box.y + box.h / 2) * k }; });
+    await page.mouse.move(from.x, from.y); await page.mouse.down();
+    await page.mouse.move(b.x + b.width * .86, b.y + b.height * .78, { steps: 25 }); await page.mouse.up();
+    await page.waitForTimeout(3500);
+    await page.click('#btnStop'); await page.waitForFunction(() => phase === 'done' && speech && speech.has, null, { timeout: 30000 });
+    await page.evaluate(MOCK_CUES);
+    await page.evaluate(() => window.scrollTo({ top: document.getElementById('capBox').getBoundingClientRect().top + scrollY - 470, behavior: 'smooth' }));
+    await page.waitForTimeout(900);
+    await page.click('#btnCap'); await page.waitForFunction(() => cues.length === 3); await page.waitForTimeout(1600);
+    await page.evaluate(() => window.scrollTo({ top: document.getElementById('playback').getBoundingClientRect().top + scrollY - 76, behavior: 'smooth' }));
+    await page.waitForTimeout(900);
+    await page.evaluate(() => { const v = document.getElementById('playback'); v.muted = true; v.currentTime = 0.5; v.play(); });
+    await page.waitForTimeout(5200);
+    const dur = (Date.now() - t0) / 1000 - lead;
+    const video = page.video(); await ctx.close();
+    const webm = await video.path(), gifPath = path.join(OUT_S, 'demo.gif');
+    const vf = 'fps=12,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=160:stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle';
+    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-ss', String(lead.toFixed(2)), '-t', String(dur.toFixed(2)), '-i', webm, '-vf', vf, '-loop', '0', gifPath]);
+    console.log('gif', (fs.statSync(gifPath).size / 1048576).toFixed(2) + ' MB', dur.toFixed(1) + ' s');
+  }
   await browser.close(); srv.close();
   console.log('ok', fs.readdirSync(OUT_B), fs.readdirSync(OUT_S));
 })();
