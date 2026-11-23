@@ -1,6 +1,7 @@
 # Creates "Recly" shortcuts on the Desktop and in the Start menu, then launches the app.
 $dir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$target = Join-Path $dir 'start.bat'
+$server = Join-Path $dir 'server.ps1'
+$ps = Join-Path $env:WINDIR 'System32\WindowsPowerShell\v1.0\powershell.exe'
 $icon = Join-Path $dir 'recly.ico'
 $shell = New-Object -ComObject WScript.Shell
 $places = @(
@@ -13,7 +14,10 @@ foreach ($place in $places) {
   $old = Join-Path $place 'Recordo.lnk'
   if (Test-Path $old) { Remove-Item $old -Force }
   $lnk = $shell.CreateShortcut((Join-Path $place 'Recly.lnk'))
-  $lnk.TargetPath = $target
+  # Point at powershell.exe itself, not at start.bat: Windows Smart App Control blocks
+  # shortcuts that open a .bat file, but allows the signed powershell.exe.
+  $lnk.TargetPath = $ps
+  $lnk.Arguments = "-NoProfile -ExecutionPolicy Bypass -WindowStyle Minimized -File `"$server`""
   $lnk.WorkingDirectory = $dir
   $lnk.WindowStyle = 7
   $lnk.Description = 'Recly - record locally. Stay yours.'
@@ -21,4 +25,4 @@ foreach ($place in $places) {
   $lnk.Save()
   Write-Host "Shortcut created: $place\Recly.lnk"
 }
-Start-Process -FilePath $target -WorkingDirectory $dir
+Start-Process -FilePath $ps -WorkingDirectory $dir -WindowStyle Minimized -ArgumentList '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$server`""

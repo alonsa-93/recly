@@ -75,7 +75,9 @@
 ## ⚡ Quick start
 Recly is a static site: one `index.html` with no build step and no runtime dependencies. It needs to be served over `http(s)`, because browsers block the camera and microphone on `file://`.
 
-**Windows, nothing to install:**
+**Windows, download:** grab [`Recly-Setup-1.0.0.exe`](https://github.com/alonsa-93/recly/releases/latest) (regular installer, no admin needed) or `Recly-portable.zip` (unzip and run `install.bat`) from the [latest release](https://github.com/alonsa-93/recly/releases/latest). Both are unsigned, so Windows may warn: choose *More info*, then *Run anyway*. On Windows 11 with Smart App Control, unblock the ZIP first (right-click, *Properties*, *Unblock*).
+
+**Windows, from source:**
 ```powershell
 git clone https://github.com/alonsa-93/recly.git
 cd recly
@@ -102,6 +104,7 @@ For the fastest captions on the CPU, serve with `Cross-Origin-Opener-Policy: sam
 - `npm install` once, then `npm test`: 49 end-to-end tests run real recordings in Chromium with a fake camera, microphone and screen (Playwright), plus axe-core accessibility checks in both themes.
 - `ONLY=<regex> npm test` runs the matching tests only.
 - `node tests/full-flow.js tests/fixtures/speech-he.wav` is the full run with the **real** captions model (downloads it on the first run): record, detect speech, consent, download, transcribe, export, trim, and transcribe again offline.
+- `powershell -File installer\build.ps1` builds `Recly-portable.zip` and the Inno Setup installer into `installer\out`.
 - `node scripts/readme-art.js` rebuilds the logo images, icons, banner and screenshots in `docs/`.
 - `package.json` is developer tooling only. The app has no dependencies and no build step.
 
