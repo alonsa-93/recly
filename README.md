@@ -75,7 +75,7 @@
 ## ⚡ Quick start
 Recly is a static site: one `index.html` with no build step and no runtime dependencies. It needs to be served over `http(s)`, because browsers block the camera and microphone on `file://`.
 
-**Windows, download:** grab [`Recly-Setup-1.0.0.exe`](https://github.com/alonsa-93/recly/releases/latest) (regular installer, no admin needed) or `Recly-portable.zip` (unzip and run `install.bat`) from the [latest release](https://github.com/alonsa-93/recly/releases/latest). Both are unsigned, so Windows may warn: choose *More info*, then *Run anyway*. On Windows 11 with Smart App Control, unblock the ZIP first (right-click, *Properties*, *Unblock*).
+**Windows, download:** grab [`Recly-Setup-1.0.0.exe`](https://github.com/alonsa-93/recly/releases/latest) (regular installer, no admin needed) or `Recly-portable.zip` (unzip and run `install.bat`) from the [latest release](https://github.com/alonsa-93/recly/releases/latest). Both are unsigned, so Windows may warn: choose *More info*, then *Run anyway*. On Windows 11 with **Smart App Control** on, the unsigned installer is blocked outright (error 4551); use the ZIP there, after unblocking it (right-click, *Properties*, *Unblock*).
 
 **Windows, from source:**
 ```powershell

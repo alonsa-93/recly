@@ -1,6 +1,8 @@
 ﻿; Recly installer (Inno Setup 6). Per-user install: no admin prompt.
 ; Build:  ISCC.exe installer\recly.iss   -> installer\out\Recly-Setup-<version>.exe
-; The setup is unsigned: SmartScreen warns, and Smart App Control may block it once downloaded.
+; The setup is unsigned: SmartScreen warns, and Windows 11 Smart App Control blocks it outright
+; (error 4551 on the extracted setup engine). The portable ZIP works there; a code-signing
+; certificate is the only fix for the installer.
 
 #define AppVer "1.0.0"
 
