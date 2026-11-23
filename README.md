@@ -6,8 +6,8 @@
 </picture>
 
 ### Record locally. Stay yours.
-**מקליטים את המסך במחשב שלך. הסרטון נשאר רק שלך.**<br>
-A free screen recorder that runs entirely in your browser. No sign-up, no upload, no time limit.
+<p dir="rtl"><b>מקליטים את המסך במחשב שלך. הסרטון נשאר רק שלך.</b></p>
+<p dir="ltr">A free screen recorder that runs entirely in your browser. No sign-up, no upload, no time limit.</p>
 
 <p>
   <img src="https://img.shields.io/badge/License-GPLv3-blue?style=for-the-badge" alt="License: GPL v3">
